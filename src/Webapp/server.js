@@ -31,7 +31,6 @@ var path = require('path');
 
 app.use(bodyparser.json());
 
-
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/" + "index.html");
 });
@@ -53,6 +52,7 @@ app.get("/api/teams", function (req, res) {
         res.json(allteams);
     })
 });
+
 app.post("/api/addteam", function (req, res) {
     var tm = new Team({
         TeamName: req.body.TeamName,
@@ -78,6 +78,7 @@ app.post("/api/addteam", function (req, res) {
 
 
 });
+
 app.post("/api/addmember", function (req, res) {
     var tmName = req.body.TeamName;
     var mem = new Member({
@@ -115,6 +116,7 @@ app.get("/api/users", function (req, res) {
         res.json(users);
     });
 });
+
 app.post("/api/newuser", function (req, res) {
 
     console.log(req.body);
@@ -165,8 +167,8 @@ app.post('/api/login', function (req, res) {
         if (users[0] != undefined) {
 
             if (users[0].Password == req.body.Password) {
-                console.log("Post Response: " + users[0].first_name + " " + users[0].last_name + " signed in");
-                res.send(users[0].first_name + " " + users[0].last_name + " signed in");
+                console.log("Post Response: " + users[0].FirstName + " " + users[0].LastName + " signed in");
+                res.send(users[0].FirstName + " " + users[0].LastName + " signed in");
             } else {
                 console.log("Post Response: " + users[0].Email + " wrong password");
                 res.send("Password is incorrect! please try again");
@@ -184,7 +186,7 @@ app.post('/api/login', function (req, res) {
 
 app.post('/api/getuser', function (req, res) {
     console.log("Post Request: getuser " + req.body.Email);
-    User.find({email: req.body.Email}, function (err, users) {
+    User.find({Email: req.body.Email}, function (err, users) {
         if (err) {
             console.log("Post Response: " + err);
             res.send(err.message);
@@ -193,8 +195,8 @@ app.post('/api/getuser', function (req, res) {
         if (users[0] != undefined) {
             res.json(users[0]);
         } else {
-            res.send("user: " + req.body.email + " wasn't found in the database");
-            console.log("Post response:" + "user: " + req.body.email + " wasn't found in the database");
+            res.send("user: " + req.body.Email + " wasn't found in the database");
+            console.log("Post response:" + "user: " + req.body.Email + " wasn't found in the database");
         }
 
     });
