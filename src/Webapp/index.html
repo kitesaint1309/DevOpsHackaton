@@ -154,27 +154,35 @@
 
         };
 
-        $scope.JoinTeam = function (teamname) {
+        $scope.JoinTeam = function (team) {
+            var userInTeam = false;
             var newmember = {
-                TeamName: teamname,
+                TeamName: team.TeamName,
                 Email:$scope.User.Email,
                 FirstName:$scope.User.FirstName,
                 LastName:$scope.User.LastName
             };
-
-            var res = $http.post((geturl()+"api/addmember"), newmember);
-            res.success(function(data, status, headers, config) {
-                var serverresp = data;
-                console.log(data);
-                if(serverresp.indexOf("Member has been added to") > -1){
-                    console.log("Member added to team");
-                    RefreshInfo();
+            for(x in team.Members){
+                if(x.Email == newmember.Email){
+                    userInTeam = true;
                 }
+            }
 
-            });
-            res.error(function(data, status, headers, config) {
-                alert( "failure message: " + JSON.stringify({data: data}));
-            });
+            if(!userInteam){
+                var res = $http.post((geturl()+"api/addmember"), newmember);
+                res.success(function(data, status, headers, config) {
+                    var serverresp = data;
+                    console.log(data);
+                    if(serverresp.indexOf("Member has been added to") > -1){
+                        console.log("Member added to team");
+                        RefreshInfo();
+                    }
+
+                });
+                res.error(function(data, status, headers, config) {
+                    alert( "failure message: " + JSON.stringify({data: data}));
+                });
+            }
 
 
 
@@ -324,7 +332,7 @@
         </thead>
         <tbody ng-repeat="team in Teams">
         <tr class="hoverrow" ng-click="ShowMembers(team.TeamName)">
-            <td colspan="2">{{team.TeamName}} <button class=" btn btn-login" ng-click="JoinTeam(team.TeamName) ;$event.stopPropagation();" style="color: white; float: right">+</button></td>
+            <td colspan="2">{{team.TeamName}} <button class=" btn btn-login" ng-click="JoinTeam(team) ;$event.stopPropagation();" style="color: white; float: right">+</button></td>
         </tr>
 
 
