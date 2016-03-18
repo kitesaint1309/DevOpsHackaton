@@ -67,7 +67,6 @@
                 //login failed
                 //console.log(res);
             });
-
             $scope.GetTeams();
         };
 
@@ -114,7 +113,6 @@
             $http.post(geturl() + "api/newuser", $scope.User).then(function (res) {
                 if (res.data === "true") {
                     $scope.Page = 'Teams';
-                    $scope.GetTeams();
                     RefreshInfo();
                 }
                 //console.log(res);
@@ -127,7 +125,6 @@
         $scope.CreateTeam = function () {
             $http.post(geturl() + "api/addteam", {TeamName: $scope.CreateTeamValue}).then(function (res) {
                 if (res.data === "Team added") {
-                    $scope.GetTeams();
                     $scope.Page = 'Teams';
                     RefreshInfo();
                 }
