@@ -16,7 +16,7 @@ var mongoose = require('mongoose');
 var User = require('./models/users');
 var Team = require('./models/teams');
 var Member = require('./models/members');
-mongoose.connect("mongodb://172.16.138.217/hackaton");
+mongoose.connect("mongodb://"+process.env.db_info+"@ds013589.mlab.com:13589/hackaton");
 
 
 app.use(function(req, res, next) {
