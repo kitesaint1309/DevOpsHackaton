@@ -29,11 +29,11 @@
         $scope.CreateTeamValue = "";
 
         $scope.Teams= [
-            {Name:"1st",Members:[
+            {TeamName:"1st",Members:[
                 {FirstName:"member1F",LastName:"member1L"},{FirstName:"member2F",LastName:"member2L"}
                 ]
             },
-            {Name:"2st",Members:[
+            {TeamName:"2st",Members:[
                 {FirstName:"member2F",LastName:"member2L"},{FirstName:"member3F",LastName:"member3L"}
                 ]
             }
@@ -204,7 +204,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3">
-                                                <input type="button" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-register" value="Log In" ng-click="Login()">
+                                                <input type="button" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In" ng-click="Login()">
                                             </div>
                                         </div>
                                     </div>
@@ -245,19 +245,29 @@
     <table class="table table-bordered table-condensed " style="text-align: center">
         <thead>
         <tr style="font-weight: bold">
-            <th style="text-align: center" ng-show="tableactive == '' ">Team Names</th>
-            <th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>
-            <th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>
+            <th style="text-align: center" colspan="2">Team Names</th>
+            <!--<th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>-->
+            <!--<th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>-->
         </tr>
         </thead>
         <tbody ng-repeat="team in Teams">
-        <tr class="hoverrow" ng-click="ShowMembers(team.Name)">
-            <td colspan="2">{{team.Name}}</td>
+        <tr class="hoverrow" ng-click="ShowMembers(team.TeamName)">
+            <td colspan="2">{{team.TeamName}}</td>
         </tr>
-        <tr ng-show="tableactive == team.Name" ng-repeat="member in team.Members">
+
+
+        <tr ng-show="tableactive == team.TeamName">
+            <td style="text-align: center ; font-weight: bold" >First Name Members</td>
+            <td style="text-align: center ; font-weight: bold">Last Name Members</td>
+        </tr>
+
+        <tr ng-show="tableactive == team.TeamName" ng-repeat="member in team.Members">
+
             <td>{{member.FirstName}}</td>
             <td>{{member.LastName}}</td>
         </tr>
+
+
         </tbody>
     </table>
 </div>
