@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <style>
+        .hoverrow:hover{
+            background: lightgray;
+        }
+    </style>
 </head>
 <body ng-app="myapp" ng-controller="mijnCtrl">
 <script>
@@ -21,6 +26,29 @@
         //$scope.User = {"FirstName" : "TestFirst","LastName" : "TestLast"};
         $scope.User = {};
         $scope.Page = "Login";
+
+        $scope.Teams= [
+            {Name:"1st",Members:[
+                {FirstName:"member1F",LastName:"member1L"},{FirstName:"member2F",LastName:"member2L"}
+                ]
+            },
+            {Name:"2st",Members:[
+                {FirstName:"member2F",LastName:"member2L"},{FirstName:"member3F",LastName:"member3L"}
+                ]
+            }
+        ];
+
+        $scope.tableactive = "";
+        $scope.ShowMembers = function(name){
+            //console.log(name);
+            if($scope.tableactive != name){
+                $scope.tableactive = name;
+            }
+            else {$scope.tableactive = "";}
+        };
+        //console.log($scope.Teams);
+        //$scope.Page = "Teams";
+
 
         $scope.Login = function () {
             //$scope.User = {"Email" : $('#emaillogin').text(),"Password" : $('#passwordlogin').text()};
@@ -184,8 +212,25 @@
         </div>
     </div>
 </div>
-<div ng-show="Page == 'Teams'">
-
+<div ng-show="Page == 'Teams'" class="container">
+    <table class="table table-bordered table-condensed " style="text-align: center">
+        <thead>
+            <tr style="font-weight: bold">
+                <th style="text-align: center" ng-show="tableactive == '' ">Team Names</th>
+                <th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>
+                <th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="team in Teams">
+            <tr class="hoverrow" ng-click="ShowMembers(team.Name)">
+                <td colspan="2">{{team.Name}}</td>
+            </tr>
+            <tr ng-show="tableactive == team.Name" ng-repeat="member in team.Members">
+                <td>{{member.FirstName}}</td>
+                <td>{{member.LastName}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
