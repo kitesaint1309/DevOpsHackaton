@@ -278,7 +278,7 @@
         </thead>
         <tbody ng-repeat="team in Teams">
         <tr class="hoverrow" ng-click="ShowMembers(team.TeamName)">
-            <td colspan="2">{{team.TeamName}}</td>
+            <td colspan="2">{{team.TeamName}} <button class=" btn btn-login" ng-click="JoinTeam() ;$event.stopPropagation();" style="color: white; float: right">+</button></td>
         </tr>
 
 
@@ -304,7 +304,7 @@
                 <div id="create-form" role="form" style="display:block;">
                     <div class="form-group">
                         <input type="text" name="team" id="teamname" tabindex="1" class="form-control"
-                               placeholder="Team Name" ng-value="CreateTeamValue">
+                               placeholder="Team Name" ng-model="CreateTeamValue">
                     </div>
                     <div class="form-group">
                         <div class="row">
