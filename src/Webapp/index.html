@@ -134,6 +134,10 @@
             });
         };
 
+        $scope.JoinTeam = function (teamname) {
+            
+        };
+
         $scope.Goto = function (page) {
             $scope.Page = page;
             RefreshInfo();
@@ -278,7 +282,7 @@
         </thead>
         <tbody ng-repeat="team in Teams">
         <tr class="hoverrow" ng-click="ShowMembers(team.TeamName)">
-            <td colspan="2">{{team.TeamName}} <button class=" btn btn-login" ng-click="JoinTeam() ;$event.stopPropagation();" style="color: white; float: right">+</button></td>
+            <td colspan="2">{{team.TeamName}} <button class=" btn btn-login" ng-click="JoinTeam(team.TeamName) ;$event.stopPropagation();" style="color: white; float: right">+</button></td>
         </tr>
 
 
