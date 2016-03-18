@@ -14,9 +14,9 @@ app.use(bodyparser.urlencoded({
 
 var mongoose = require('mongoose');
 var User = require('./models/users');
-//var Team = require('./models/teams');
+var Team = require('./models/teams');
 var Member = require('./models/members');
-//mongoose.connect("mongodb://172.16.138.217/hackaton");
+mongoose.connect("mongodb://172.16.138.217/hackaton");
 
 
 app.use(function (req, res, next) {
@@ -130,7 +130,6 @@ app.post("/api/newuser", function (req, res) {
 
 app.post('/api/login', function (req, res) {
     console.log("Post Request: login " + req.body.Email);
-    res.send(" signed in");
     User.find({email: req.body.Email}, function (err, users) {
         if (err) {
             console.log("Post Response: " + err);
@@ -159,7 +158,6 @@ app.post('/api/login', function (req, res) {
 
 app.post('/api/getuser', function (req, res) {
     console.log("Post Request: getuser " + req.body.Email);
-    res.send(" signed in");
     User.find({email: req.body.Email}, function (err, users) {
         if (err) {
             console.log("Post Response: " + err);
