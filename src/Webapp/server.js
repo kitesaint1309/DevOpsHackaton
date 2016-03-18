@@ -156,7 +156,7 @@ app.post("/api/newuser", function (req, res) {
 
 app.post('/api/login', function (req, res) {
     console.log("Post Request: login " + req.body.Email);
-    User.find({email: req.body.Email}, function (err, users) {
+    User.find({Email: req.body.Email}, function (err, users) {
         if (err) {
             console.log("Post Response: " + err);
             res.send(err.message);
@@ -164,17 +164,17 @@ app.post('/api/login', function (req, res) {
 
         if (users[0] != undefined) {
 
-            if (users[0].password == req.body.password) {
+            if (users[0].Password == req.body.Password) {
                 console.log("Post Response: " + users[0].first_name + " " + users[0].last_name + " signed in");
                 res.send(users[0].first_name + " " + users[0].last_name + " signed in");
             } else {
-                console.log("Post Response: " + users[0].email + " wrong password");
+                console.log("Post Response: " + users[0].Email + " wrong password");
                 res.send("Password is incorrect! please try again");
             }
 
         } else {
-            res.send("user: " + req.body.email + " wasn't found in the database");
-            console.log("Post response:" + "user: " + req.body.email + " wasn't found in the database");
+            res.send("user: " + req.body.Email + " wasn't found in the database");
+            console.log("Post response:" + "user: " + req.body.Email + " wasn't found in the database");
         }
 
     });
