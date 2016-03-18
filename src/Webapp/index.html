@@ -67,6 +67,8 @@
                 //login failed
                 //console.log(res);
             });
+
+            $scope.GetTeams();
         };
 
         $scope.tableactive = "";
@@ -112,6 +114,7 @@
             $http.post(geturl() + "api/newuser", $scope.User).then(function (res) {
                 if (res.data === "true") {
                     $scope.Page = 'Teams';
+                    $scope.GetTeams();
                     RefreshInfo();
                 }
                 //console.log(res);
@@ -124,6 +127,7 @@
         $scope.CreateTeam = function () {
             $http.post(geturl() + "api/addteam", {TeamName: $scope.CreateTeamValue}).then(function (res) {
                 if (res.data === "Team added") {
+                    $scope.GetTeams();
                     $scope.Page = 'Teams';
                     RefreshInfo();
                 }
@@ -134,8 +138,46 @@
             });
         };
 
+        $scope.GetTeams = function(){
+            var res = $http.get(geturl()+"api/teams");
+            res.success(function(data, status, headers, config) {
+                var serverresp = data;
+                console.log(data);
+                if(serverresp != undefined){
+                   $scope.Teams = serverresp;
+                }
+
+            });
+            res.error(function(data, status, headers, config) {
+                alert( "failure message: " + JSON.stringify({data: data}));
+            });
+
+        };
+
         $scope.JoinTeam = function (teamname) {
-            
+            var newmember = {
+                TeamName: teamname,
+                Email:$scope.User.Email,
+                FirstName:$scope.User.FirstName,
+                LastName:$scope.User.LastName
+            };
+
+            var res = $http.post((geturl()+"api/addmember"), newmember);
+            res.success(function(data, status, headers, config) {
+                var serverresp = data;
+                console.log(data);
+                if(serverresp.indexOf("Member has been added to") > -1){
+                    console.log("Member added to team");
+                    RefreshInfo();
+                }
+
+            });
+            res.error(function(data, status, headers, config) {
+                alert( "failure message: " + JSON.stringify({data: data}));
+            });
+
+
+
         };
 
         $scope.Goto = function (page) {

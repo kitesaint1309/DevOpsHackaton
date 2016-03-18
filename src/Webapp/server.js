@@ -129,7 +129,7 @@ app.post("/api/newuser", function (req, res) {
         LastName: req.body.LastName
     });
 
-    User.find({email: req.body.email}, function (err, users) {
+    User.find({Email: req.body.Email}, function (err, users) {
         if (err) {
             console.log("post response: " + err.message);
 
