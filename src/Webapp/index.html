@@ -55,7 +55,7 @@
 
         var RefreshInfo = function () {
             $http.post(geturl() + "api/getuser", $scope.User).then(function (res) {
-                if (res.data.Email.isNullOrUndefined() && res.data.indexOf("database") != -1) {
+                if (res.data.indexOf("database") != -1) {
                     //failed
                 }
                 else {
@@ -107,7 +107,7 @@
              "FirstName" : $('#firstname').text(),
              "LastName" : $('#lastname').text()
              };*/
-            $scope.Page = 'Teams';
+            //$scope.Page = 'Teams';
             $http.post(geturl() + "api/newuser", $scope.User).then(function (res) {
                 if (res.data === "true") {
                     $scope.Page = 'Teams';
