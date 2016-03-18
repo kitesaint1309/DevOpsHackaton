@@ -49,7 +49,7 @@ app.get("/api/teams", function (req, res) {
         if (err) throw err;
 
         // object of all the users
-        console.log("requested all users");
+        console.log("requested all teams");
         res.json(allteams);
     })
 });

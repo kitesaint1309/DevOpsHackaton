@@ -33,6 +33,6 @@ var teamModel = new mongoose.Schema(
 
 
 
-var Team = mongoose.model('Users', teamModel);
+var Team = mongoose.model('Teams', teamModel);
 
 module.exports = Team;
