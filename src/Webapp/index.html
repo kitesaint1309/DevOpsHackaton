@@ -39,7 +39,19 @@
         ];
 
         var RefreshInfo = function () {
-
+            $http.post(window.location.href + "api/getuser", $scope.User).then(function (res) {
+                if(res.data.Email.isNullOrUndefined() && res.data.contains("database"))
+                {
+                    //failed
+                }
+                else{
+                    $scope.User = res.data;
+                }
+                //console.log(res);
+            }, function (res) {
+                //login failed
+                console.log(res);
+            });
         };
 
         $scope.tableactive = "";

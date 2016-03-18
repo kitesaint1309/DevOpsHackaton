@@ -14,15 +14,15 @@ app.use(bodyparser.urlencoded({
 
 var mongoose = require('mongoose');
 var User = require('./models/users');
-var Team = require('./models/teams');
+//var Team = require('./models/teams');
 var Member = require('./models/members');
-mongoose.connect("mongodb://172.16.138.217/hackaton");
+//mongoose.connect("mongodb://172.16.138.217/hackaton");
 
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header ('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
 });
 
@@ -32,30 +32,33 @@ var path = require('path');
 app.use(bodyparser.json());
 
 
-app.get("/",function(req,res){
+app.get("/", function (req, res) {
     res.sendFile(__dirname + "/" + "index.html");
 });
-app.get("/css/reset.css",function(req,res) {
+app.get("/css/login.css", function (req, res) {
+    res.sendFile(__dirname + "/css/" + "login.css");
+});
+app.get("/css/reset.css", function (req, res) {
     res.sendFile(__dirname + "/css/" + "reset.css");
 });
-app.get("/js/controller.js",function(req,res) {
+app.get("/js/controller.js", function (req, res) {
     res.sendFile(__dirname + "/js/" + "controller.js");
 });
 
-app.get("/api/teams",function(req,res){
-   Team.find({},function(err,allteams){
-       if (err) throw err;
+app.get("/api/teams", function (req, res) {
+    Team.find({}, function (err, allteams) {
+        if (err) throw err;
 
-       // object of all the users
-       console.log("requested all users");
-       res.json(allteams);
-   })
+        // object of all the users
+        console.log("requested all users");
+        res.json(allteams);
+    })
 });
 
-app.post("/api/addteam",function(req,res){
+app.post("/api/addteam", function (req, res) {
     var tm = new Team({
-        TeamName:req.body.TeamName,
-        Members:[]
+        TeamName: req.body.TeamName,
+        Members: []
     });
 
     tm.save(function (err) {
@@ -63,21 +66,21 @@ app.post("/api/addteam",function(req,res){
             console.log("post response: " + err.message);
             res.send(err.message + err);
         }
-        else{
+        else {
             res.send("Team added");
         }
     });
 
 });
 
-app.post("/api/addmember",function(req,res){
+app.post("/api/addmember", function (req, res) {
 
 });
 
-app.get("/api/users",function(req,res){
+app.get("/api/users", function (req, res) {
 
     // get all the users
-    User.find({}, function(err, users) {
+    User.find({}, function (err, users) {
         if (err) throw err;
 
         // object of all the users
@@ -86,9 +89,9 @@ app.get("/api/users",function(req,res){
     });
 });
 
-app.post("/api/newuser",function(req,res){
+app.post("/api/newuser", function (req, res) {
 
-    console.log( req.body);
+    console.log(req.body);
 
 
     var newUser = new User({
@@ -98,11 +101,11 @@ app.post("/api/newuser",function(req,res){
         LastName: req.body.LastName
     });
 
-    User.find({email: req.body.email}, function(err, users) {
+    User.find({email: req.body.email}, function (err, users) {
         if (err) {
             console.log("post response: " + err.message);
 
-        }else{
+        } else {
             if (users[0] == undefined) {
 
                 newUser.save(function (err) {
@@ -110,40 +113,62 @@ app.post("/api/newuser",function(req,res){
                         console.log("post response: " + err.message);
                         res.send(err.message + err);
                     }
-                    else{
+                    else {
                         res.send("true");
-                        console.log("post response: Created new user: " + newUser.Email);}
+                        console.log("post response: Created new user: " + newUser.Email);
+                    }
 
 
                 });
-            }else{
-                console.log("post response: " + "User " + newUser.Email +" already exists");
-                res.send("User " + newUser.Email +" already exists");
+            } else {
+                console.log("post response: " + "User " + newUser.Email + " already exists");
+                res.send("User " + newUser.Email + " already exists");
             }
         }
     });
 });
 
-app.post('/api/login',function(req,res){
+app.post('/api/login', function (req, res) {
     console.log("Post Request: login " + req.body.Email);
-
-    User.find({email: req.body.Email}, function(err, users) {
-        if (err){
+    res.send(" signed in");
+    User.find({email: req.body.Email}, function (err, users) {
+        if (err) {
             console.log("Post Response: " + err);
             res.send(err.message);
         }
 
-        if(users[0] != undefined ){
+        if (users[0] != undefined) {
 
-            if(users[0].password == req.body.password){
-                console.log("Post Response: " + users[0].first_name + " " + users[0].last_name+" signed in");
-                res.send(users[0].first_name + " " + users[0].last_name+" signed in" );
-            }else {
+            if (users[0].password == req.body.password) {
+                console.log("Post Response: " + users[0].first_name + " " + users[0].last_name + " signed in");
+                res.send(users[0].first_name + " " + users[0].last_name + " signed in");
+            } else {
                 console.log("Post Response: " + users[0].email + " wrong password");
-                res.send("Password is incorrect! please try again" );
+                res.send("Password is incorrect! please try again");
             }
 
-        }else{
+        } else {
+            res.send("user: " + req.body.email + " wasn't found in the database");
+            console.log("Post response:" + "user: " + req.body.email + " wasn't found in the database");
+        }
+
+    });
+
+
+});
+
+app.post('/api/getuser', function (req, res) {
+    console.log("Post Request: getuser " + req.body.Email);
+    res.send(" signed in");
+    User.find({email: req.body.Email}, function (err, users) {
+        if (err) {
+            console.log("Post Response: " + err);
+            res.send(err.message);
+        }
+
+        if (users[0] != undefined) {
+            res.json(users[0]);
+        } else {
             res.send("user: " + req.body.email + " wasn't found in the database");
             console.log("Post response:" + "user: " + req.body.email + " wasn't found in the database");
         }
