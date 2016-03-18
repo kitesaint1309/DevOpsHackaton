@@ -26,6 +26,7 @@
         //$scope.User = {"FirstName" : "TestFirst","LastName" : "TestLast"};
         $scope.User = {};
         $scope.Page = "Login";
+        $scope.CreateTeamValue = "";
 
         $scope.Teams= [
             {Name:"1st",Members:[
@@ -106,7 +107,7 @@
         };
 
         $scope.CreateTeam = function () {
-            $http.post(window.location.href + "api/addteam", $scope.CreateTeam).then(function (res) {
+            $http.post(window.location.href + "api/addteam", {TeamName : $scope.CreateTeamValue}).then(function (res) {
                 if(res.data === "Team added")
                 {
                     $scope.Page = 'Teams';
@@ -270,12 +271,12 @@
             <div class="col-md-8 col-md-offset-2">
                 <div id="create-form" role="form" style="display:block;">
                     <div class="form-group">
-                        <input type="text" name="team" id="teamname" tabindex="1" class="form-control" placeholder="Team Name">
+                        <input type="text" name="team" id="teamname" tabindex="1" class="form-control" placeholder="Team Name" ng-value="CreateTeamValue">
                     </div>
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6 col-sm-offset-3">
-                                <input type="button" name="create-team" id="create-team" tabindex="4" class="form-control btn btn-login" value="Create Team" ng-click="">
+                                <input type="button" name="create-team" id="create-team" tabindex="4" class="form-control btn btn-login" value="Create Team" ng-click="CreateTeam">
                             </div>
                         </div>
                     </div>
