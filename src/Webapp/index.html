@@ -26,6 +26,7 @@
         //$scope.User = {"FirstName" : "TestFirst","LastName" : "TestLast"};
         $scope.User = {};
         $scope.Page = "Login";
+        $scope.CreateTeamValue = "";
 
         $scope.Teams= [
             {Name:"1st",Members:[
@@ -38,6 +39,22 @@
             }
         ];
 
+        var RefreshInfo = function () {
+            $http.post(window.location.href + "api/getuser", $scope.User).then(function (res) {
+                if(res.data.Email.isNullOrUndefined() && res.data.contains("database"))
+                {
+                    //failed
+                }
+                else{
+                    $scope.User = res.data;
+                }
+                //console.log(res);
+            }, function (res) {
+                //login failed
+                console.log(res);
+            });
+        };
+
         $scope.tableactive = "";
         $scope.ShowMembers = function(name){
             //console.log(name);
@@ -47,7 +64,7 @@
             else {$scope.tableactive = "";}
         };
         //console.log($scope.Teams);
-        //$scope.Page = "Teams";
+        //$scope.Page = "CreateTeam";
 
 
         $scope.Login = function () {
@@ -59,6 +76,7 @@
                 if(res.data.contains("signed in"))
                 {
                     $scope.Page = 'Teams';
+                    RefreshInfo();
                 }
                 //console.log(res);
             }, function (res) {
@@ -79,6 +97,21 @@
                 if(res.data === "true")
                 {
                     $scope.Page = 'Teams';
+                    RefreshInfo();
+                }
+                //console.log(res);
+            }, function (res) {
+                //register failed
+                console.log(res);
+            });
+        };
+
+        $scope.CreateTeam = function () {
+            $http.post(window.location.href + "api/addteam", {TeamName : $scope.CreateTeamValue}).then(function (res) {
+                if(res.data === "Team added")
+                {
+                    $scope.Page = 'Teams';
+                    RefreshInfo();
                 }
                 //console.log(res);
             }, function (res) {
@@ -166,16 +199,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3">
-                                                <input type="button" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In" ng-click="Login()">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="text-center">
-                                                    <a href="#" tabindex="5" class="forgot-password">Forgot Password?</a>
-                                                </div>
+                                                <input type="button" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-register" value="Log In" ng-click="Login()">
                                             </div>
                                         </div>
                                     </div>
@@ -199,7 +223,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3">
-                                                <input type="button" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now" ng-click="Register">
+                                                <input type="button" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now" ng-click="Register()">
                                             </div>
                                         </div>
                                     </div>
@@ -215,22 +239,42 @@
 <div ng-show="Page == 'Teams'" class="container">
     <table class="table table-bordered table-condensed " style="text-align: center">
         <thead>
-            <tr style="font-weight: bold">
-                <th style="text-align: center" ng-show="tableactive == '' ">Team Names</th>
-                <th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>
-                <th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>
-            </tr>
+        <tr style="font-weight: bold">
+            <th style="text-align: center" ng-show="tableactive == '' ">Team Names</th>
+            <th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>
+            <th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>
+        </tr>
         </thead>
         <tbody ng-repeat="team in Teams">
-            <tr class="hoverrow" ng-click="ShowMembers(team.Name)">
-                <td colspan="2">{{team.Name}}</td>
-            </tr>
-            <tr ng-show="tableactive == team.Name" ng-repeat="member in team.Members">
-                <td>{{member.FirstName}}</td>
-                <td>{{member.LastName}}</td>
-            </tr>
+        <tr class="hoverrow" ng-click="ShowMembers(team.Name)">
+            <td colspan="2">{{team.Name}}</td>
+        </tr>
+        <tr ng-show="tableactive == team.Name" ng-repeat="member in team.Members">
+            <td>{{member.FirstName}}</td>
+            <td>{{member.LastName}}</td>
+        </tr>
         </tbody>
     </table>
+</div>
+<div ng-show="Page == 'CreateTeam'" class="container" style="margin-top: 10%;">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="create-form" role="form" style="display:block;">
+                    <div class="form-group">
+                        <input type="text" name="team" id="teamname" tabindex="1" class="form-control" placeholder="Team Name" ng-value="CreateTeamValue">
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <input type="button" name="create-team" id="create-team" tabindex="4" class="form-control btn btn-login" value="Create Team" ng-click="CreateTeam">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
