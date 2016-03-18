@@ -38,6 +38,10 @@
             }
         ];
 
+        var RefreshInfo = function () {
+
+        };
+
         $scope.tableactive = "";
         $scope.ShowMembers = function(name){
             //console.log(name);
@@ -59,6 +63,7 @@
                 if(res.data.contains("signed in"))
                 {
                     $scope.Page = 'Teams';
+                    RefreshInfo();
                 }
                 //console.log(res);
             }, function (res) {
@@ -79,6 +84,21 @@
                 if(res.data === "true")
                 {
                     $scope.Page = 'Teams';
+                    RefreshInfo();
+                }
+                //console.log(res);
+            }, function (res) {
+                //register failed
+                console.log(res);
+            });
+        };
+
+        $scope.CreateTeam = function () {
+            $http.post(window.location.href + "api/addteam", $scope.CreateTeam).then(function (res) {
+                if(res.data === "Team added")
+                {
+                    $scope.Page = 'Teams';
+                    RefreshInfo();
                 }
                 //console.log(res);
             }, function (res) {
@@ -215,22 +235,25 @@
 <div ng-show="Page == 'Teams'" class="container">
     <table class="table table-bordered table-condensed " style="text-align: center">
         <thead>
-            <tr style="font-weight: bold">
-                <th style="text-align: center" ng-show="tableactive == '' ">Team Names</th>
-                <th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>
-                <th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>
-            </tr>
+        <tr style="font-weight: bold">
+            <th style="text-align: center" ng-show="tableactive == '' ">Team Names</th>
+            <th style="text-align: center" ng-show="tableactive != '' ">First Name Members</th>
+            <th style="text-align: center" ng-show="tableactive != '' ">Last Name Members</th>
+        </tr>
         </thead>
         <tbody ng-repeat="team in Teams">
-            <tr class="hoverrow" ng-click="ShowMembers(team.Name)">
-                <td colspan="2">{{team.Name}}</td>
-            </tr>
-            <tr ng-show="tableactive == team.Name" ng-repeat="member in team.Members">
-                <td>{{member.FirstName}}</td>
-                <td>{{member.LastName}}</td>
-            </tr>
+        <tr class="hoverrow" ng-click="ShowMembers(team.Name)">
+            <td colspan="2">{{team.Name}}</td>
+        </tr>
+        <tr ng-show="tableactive == team.Name" ng-repeat="member in team.Members">
+            <td>{{member.FirstName}}</td>
+            <td>{{member.LastName}}</td>
+        </tr>
         </tbody>
     </table>
+</div>
+<div ng-show="Page == 'CreateTeam'" class="container">
+
 </div>
 </body>
 </html>
