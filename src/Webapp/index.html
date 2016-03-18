@@ -53,17 +53,19 @@
         };
 
         var RefreshInfo = function () {
+            console.log("refresh");
             $http.post(geturl() + "api/getuser", $scope.User).then(function (res) {
-                if (res.data.indexOf("database") != -1) {
+                console.log(res.data);
+                //if (res.data != "false") {
                     //failed
-                }
-                else {
+                //}
+                //else {
                     $scope.User = res.data;
-                }
+                //}
                 //console.log(res);
             }, function (res) {
                 //login failed
-                console.log(res);
+                //console.log(res);
             });
         };
 
@@ -88,7 +90,7 @@
             //$scope.Page = 'Teams';
             $http.post(geturl() + "api/login", $scope.User).then(function (res) {
                 console.log(res.data);
-                if (res.data.indexOf("signed in") != -1) {
+                if (res.data === "true") {
                     $scope.Page = 'Teams';
                     RefreshInfo();
                 }
@@ -308,7 +310,7 @@
                         <div class="row">
                             <div class="col-sm-6 col-sm-offset-3">
                                 <input type="button" name="create-team" id="create-team" tabindex="4"
-                                       class="form-control btn btn-login" value="Create Team" ng-click="CreateTeam">
+                                       class="form-control btn btn-login" value="Create Team" ng-click="CreateTeam()">
                             </div>
                         </div>
                     </div>
