@@ -44,7 +44,6 @@ app.get("/css/reset.css", function (req, res) {
 app.get("/js/controller.js", function (req, res) {
     res.sendFile(__dirname + "/js/" + "controller.js");
 });
-
 app.get("/api/teams", function (req, res) {
     Team.find({}, function (err, allteams) {
         if (err) throw err;
@@ -54,7 +53,6 @@ app.get("/api/teams", function (req, res) {
         res.json(allteams);
     })
 });
-
 app.post("/api/addteam", function (req, res) {
     var tm = new Team({
         TeamName: req.body.TeamName,
@@ -72,11 +70,9 @@ app.post("/api/addteam", function (req, res) {
     });
 
 });
-
 app.post("/api/addmember", function (req, res) {
 
 });
-
 app.get("/api/users", function (req, res) {
 
     // get all the users
@@ -88,7 +84,6 @@ app.get("/api/users", function (req, res) {
         res.json(users);
     });
 });
-
 app.post("/api/newuser", function (req, res) {
 
     console.log(req.body);
