@@ -25,7 +25,7 @@ var teamModel = new mongoose.Schema(
             type: String,
             required:true
         },
-        Member:{
+        Members:{
             type: [memberModel],
             required:false
         }

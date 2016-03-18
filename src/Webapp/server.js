@@ -59,20 +59,51 @@ app.post("/api/addteam", function (req, res) {
         Members: []
     });
 
-    tm.save(function (err) {
-        if (err) {
-            console.log("post response: " + err.message);
-            res.send(err.message + err);
+    Team.find({TeamName: tm.TeamName}, function(err,teams){
+        if (teams[0] == undefined){
+            tm.save(function (err) {
+                if (err) {
+                    console.log("post response: " + err.message);
+                    res.send(err.message + err);
+                }
+                else {
+                    res.send("Team added");
+                }
+            });
         }
         else {
-            res.send("Team added");
+            res.send("Team: "+tmName+" already exists!!");
         }
     });
 
-});
-app.post("/api/addmember", function (req, res) {
 
 });
+app.post("/api/addmember", function (req, res) {
+    var tmName = req.body.TeamName;
+    var mem = new Member({
+    Email:req.body.Email,
+    FirstName: req.body.FirstName,
+    LastName: req.body.LastName
+});
+    Team.find({TeamName: tmName}, function(err,teams){
+        if (teams[0] != undefined){
+            teams[0].Members.push(mem);
+            teams[0].save(function(err){
+                if (err){
+                    console.log("Post Response: " + err);
+                    res.send("error: " + err.message);
+                }else{
+                    console.log("Post Response: " + teams[0].TeamName + " Member added");
+                    res.send("Member has been added to: " + teams[0].TeamName );
+                }
+            }) ;
+        }
+        else {
+            res.send("Team: "+tmName+" not found");
+        }
+    })
+});
+
 app.get("/api/users", function (req, res) {
 
     // get all the users
